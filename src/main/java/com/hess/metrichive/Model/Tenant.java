@@ -19,4 +19,10 @@ public class Tenant {
 
     @Column(nullable = false , unique = true)
     public String email;
+
+    @Column(nullable = false, unique = true , name = "api_key")
+    public String apiKey;
+
+    @Column(nullable = false , size)
+    public String tier = "Free"
 }
