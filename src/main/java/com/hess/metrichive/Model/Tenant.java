@@ -1,31 +1,50 @@
-package com.hess.metrichive.Model;
-
-
+package com.metrichive.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tenants")
 @Data
 public class Tenant {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long id;
+    private Long id;
 
     @Column(nullable = false)
-    public String name;
+    private String name;
 
-    @Column(nullable = false , unique = true)
-    public String email;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    @Column(nullable = false, unique = true , name = "api_key")
-    public String apiKey;
+    @Column(name = "api_key", nullable = false, unique = true)
+    private String apiKey;
 
-    @Column(nullable = false , length = 50)
-    public String tier = "Free";
+    @Column(length = 50)
+    private String tier = "free";
 
-    @Column
+    @Column(name = "max_metrics_per_day")
     private Integer maxMetricsPerDay = 10000;
+
+    @Column(name = "max_requests_per_minute")
+    private Integer maxRequestsPerMinute = 60;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
