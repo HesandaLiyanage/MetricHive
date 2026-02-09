@@ -1,4 +1,4 @@
-package com.metrichive.model;
+package com.hess.metrichive.Model;
 
 import jakarta.persistence.*;
 import lombok.Data;

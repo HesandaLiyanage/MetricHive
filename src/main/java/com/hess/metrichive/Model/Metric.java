@@ -1,0 +1,42 @@
+package com.hess.metrichive.Model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import java.time.LocalDateTime;
+import java.util.Map;
+
+@Entity
+@Table(name = "metrics")
+@Data
+public class Metric {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "tenant_id", nullable = false)
+    private Long tenantId;
+
+    @Column(name = "metric_name", nullable = false)
+    private String metricName;
+
+    @Column(nullable = false)
+    private Double value;
+
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private Map<String, String> tags;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+}
