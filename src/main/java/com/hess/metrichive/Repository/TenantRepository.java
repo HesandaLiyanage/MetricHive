@@ -1,4 +1,4 @@
-package com.metrichive.repository;
+package com.hess.metrichive.Repository;
 
 import com.hess.metrichive.Model.Tenant;
 import org.springframework.data.jpa.repository.JpaRepository;
