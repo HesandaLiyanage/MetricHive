@@ -23,6 +23,8 @@ public class Tenant {
     @Column(nullable = false, unique = true , name = "api_key")
     public String apiKey;
 
-    @Column(nullable = false , size)
-    public String tier = "Free"
+    @Column(nullable = false , length = 50)
+    public String tier = "Free";
+
+
 }
