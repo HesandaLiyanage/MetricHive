@@ -13,4 +13,10 @@ public class Tenant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
+
+    @Column(nullable = false)
+    public String name;
+
+    @Column(nullable = false , unique = true)
+    public String email;
 }
