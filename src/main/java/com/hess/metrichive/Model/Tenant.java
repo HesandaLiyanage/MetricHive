@@ -26,5 +26,6 @@ public class Tenant {
     @Column(nullable = false , length = 50)
     public String tier = "Free";
 
-    public Integer Ma
+    @Column
+    private Integer maxMetricsPerDay = 10000;
 }
