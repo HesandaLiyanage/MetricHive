@@ -26,5 +26,5 @@ public class Tenant {
     @Column(nullable = false , length = 50)
     public String tier = "Free";
 
-    public
+    public Integer Ma
 }
