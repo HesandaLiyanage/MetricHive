@@ -28,7 +28,13 @@ public class MetricIngestionService {
 
     private Metric convertToEntity(Long tenantId, MetricDTO dto) {
         Metric metric = new Metric();
-        Metric.setTenantId(tenantId);
+        metric.setTenantId(tenantId);
+        metric.setMetricName(dto.getName());
+        metric.setValue(dto.getValue());
+        metric.setTimestamp(dto.getTimestamp());
+        metric.setTags(dto.getTags());
+
+        return metric;
     }
 
 
