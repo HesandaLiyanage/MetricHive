@@ -17,4 +17,5 @@ public class TenantService {
         Optional<Tenant> tenant = tenantRepository.findById(Id);
         return tenant;
     }
+    
 }
