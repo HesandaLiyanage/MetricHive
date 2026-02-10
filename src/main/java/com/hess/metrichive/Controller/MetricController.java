@@ -1,7 +1,9 @@
 package com.hess.metrichive.Controller;
 
 
+import com.hess.metrichive.Model.Tenant;
 import com.hess.metrichive.Service.MetricIngestionService;
+import com.hess.metrichive.dto.IngestRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,10 @@ public class MetricController {
     public final MetricIngestionService metricIngestionService;
 
     @PostMapping("/ingest")
-    public ResponseEntity<?> ingestMetrics(@Valid @RequestBody)
+    public ResponseEntity<?> ingestMetrics(@Valid @RequestBody IngestRequest request) {
+        log.info("Got a request to ingestion with {} metrics" , request.getMetrics());
+
+        Tenant tenant =
+    }
 
 }
