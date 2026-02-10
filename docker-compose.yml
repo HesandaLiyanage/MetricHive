@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: metrichive
       POSTGRES_PASSWORD: metrichive123
     ports:
-      - "5433:5432"  # ← Changed from 5432:5432 to 5433:5432
+      - "5432:5432"  # ← Changed from 5432:5432 to 5433:5432
       # Your Mac port 5433 maps to container's internal 5432
     volumes:
       - postgres_data:/var/lib/postgresql/data

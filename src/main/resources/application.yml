@@ -1,17 +1,17 @@
 spring:
+  profles:
+    - dev
+    - prod
   flyway:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
-  profles:
-    - dev
-    - prod
   application:
     name: metrichive
 
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/metrichive
+    url: jdbc:postgresql://localhost:5432/metrichive
     username: metrichive
     password: metrichive123
     driver-class-name: org.postgresql.Driver
@@ -58,6 +58,10 @@ spring:
     type: redis
     redis:
       time-to-live: 300000  # 5 minutes
+  web:
+    error:
+      include-message: always
+      include-stacktrace: never
 
 # Logging
 logging:
@@ -84,6 +88,3 @@ management:
 # Server
 server:
   port: 8080
-  error:
-    include-message: always
-    include-stacktrace: never  # Security!
