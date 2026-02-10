@@ -13,5 +13,8 @@ import java.util.Optional;
 public class TenantService {
     public final TenantRepository tenantRepository;
 
-    public Optional<Tenant> 
+    public Optional<Tenant> tenantFind(Long Id) {
+        Optional<Tenant> tenant = tenantRepository.findById(Id);
+        return tenant;
+    }
 }
