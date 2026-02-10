@@ -30,6 +30,8 @@ public class MetricController {
         Tenant tenant = tenantService.findApiKey(request.getApiKey()).orElseThrow(
                 () -> new RuntimeException("Invalid API Key!")
         );
+
+        metricIngestionService.ingestMetrics(tenant.getId(), request.getMetrics());
     }
 
 }
