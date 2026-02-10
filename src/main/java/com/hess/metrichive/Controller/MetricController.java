@@ -26,7 +26,10 @@ public class MetricController {
     public ResponseEntity<?> ingestMetrics(@Valid @RequestBody IngestRequest request) {
         log.info("Got a request to ingestion with {} metrics" , request.getMetrics());
 
-        tenantService.findApiKey(request.getApiKey());
+
+        Tenant tenant = tenantService.findApiKey(request.getApiKey()).orElseThrow(
+                () -> new RuntimeException("Invalid API Key!")
+        );
     }
 
 }
