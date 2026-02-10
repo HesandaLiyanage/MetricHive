@@ -37,5 +37,4 @@ public class MetricIngestionService {
         return metric;
     }
 
-
 }
