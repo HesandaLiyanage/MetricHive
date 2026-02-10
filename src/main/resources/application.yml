@@ -11,7 +11,7 @@ spring:
 
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/metrichive
+    url: jdbc:postgresql://127.0.0.1:5433/metrichive
     username: metrichive
     password: metrichive123
     driver-class-name: org.postgresql.Driver
