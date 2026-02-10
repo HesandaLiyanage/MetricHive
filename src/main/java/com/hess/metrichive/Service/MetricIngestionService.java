@@ -1,4 +1,4 @@
-package com.metrichive.service;
+package com.hess.metrichive.Service;
 
 import com.hess.metrichive.dto.MetricDTO;
 import com.hess.metrichive.Model.Metric;
