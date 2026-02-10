@@ -4,12 +4,14 @@ package com.hess.metrichive.Service;
 import com.hess.metrichive.Model.Tenant;
 import com.hess.metrichive.Repository.TenantRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class TenantService {
     public final TenantRepository tenantRepository;
 
@@ -18,6 +20,10 @@ public class TenantService {
         return tenant;
     }
 
-    public Optional<Tenant> findApiKey()
+    public Optional<Tenant> findApiKey(String apiKey) {
+        log.info("Got a request to validate the api key {}", apiKey);
+        Optional<Tenant> tenant = tenantRepository.findByApiKey(apiKey);
+        return tenant;
+    }
 
 }
