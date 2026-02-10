@@ -28,7 +28,7 @@ spring:
   # JPA Settings
   jpa:
     hibernate:
-      ddl-auto: validate  # NEVER use 'update' in production! this checks if the tables and columns are there or not
+      ddl-auto: update  # NEVER use 'update' in production! this checks if the tables and columns are there or not
       #you can use create , create-drop, update for more things to happen when shutdown
     show-sql: false  # We'll use logging instead , not good for logging and performance
     properties:
@@ -83,7 +83,7 @@ management:
   metrics:
     export:
       prometheus:
-        enabled: true
+       enabled: true
 
 # Server
 server:
