@@ -28,7 +28,7 @@ public class DevelopmentDataLoader implements CommandLineRunner {
         log.info("Data Loader running");
 
         if (tenantRepository.count() == 0) {
-
+            log.info("Data already injected to the database. Exiting DataLoader...");
         }
 
 
