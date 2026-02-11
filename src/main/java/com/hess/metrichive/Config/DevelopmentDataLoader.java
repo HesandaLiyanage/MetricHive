@@ -20,10 +20,19 @@ import java.util.Map;
 @Slf4j
 public class DevelopmentDataLoader implements CommandLineRunner {
 
+    public final MetricRepository metricRepository;
+    public final TenantRepository tenantRepository;
 
     @Override
     public void run(String... args) throws Exception {
-        
+        log.info("Data Loader running");
+
+        if (tenantRepository.count() == 0) {
+
+        }
+
+
+
 
     }
 }
