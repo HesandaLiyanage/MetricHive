@@ -1,22 +1,25 @@
+# application.yml (base configuration)
 spring:
-  profles:
-    - dev
-    - prod
+  profiles:
+    active: dev  # Default to dev
+  application:
+    name: metrichive
   flyway:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
-  application:
-    name: metrichive
 
-
+---
+# application-dev.yml
+spring:
+  config:
+    activate:
+      on-profile: dev
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5433/metrichive
+    url: jdbc:postgresql://localhost:5433/metrichive_dev
     username: metrichive
     password: metrichive123
     driver-class-name: org.postgresql.Driver
-
-
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5
@@ -24,24 +27,19 @@ spring:
       idle-timeout: 600000
       max-lifetime: 1800000
       pool-name: MetricHivePool
-
-  # JPA Settings
   jpa:
     hibernate:
-      ddl-auto: update  # NEVER use 'update' in production! this checks if the tables and columns are there or not
-      #you can use create , create-drop, update for more things to happen when shutdown
-    show-sql: false  # We'll use logging instead , not good for logging and performance
+      ddl-auto: update  # OK for dev only
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         use_sql_comments: true
         jdbc:
-          batch_size: 50  # For batch inserts
+          batch_size: 50
         order_inserts: true
         order_updates: true
-
-  # Redis Configuration
   data:
     redis:
       host: localhost
@@ -52,39 +50,63 @@ spring:
           max-active: 8
           max-idle: 8
           min-idle: 2
-
-  # Cache Configuration
   cache:
     type: redis
     redis:
-      time-to-live: 300000  # 5 minutes
-  web:
-    error:
-      include-message: always
-      include-stacktrace: never
+      time-to-live: 300000
 
-# Logging
-logging:
-  level:
-    com.metrichive: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    com.zaxxer.hikari: DEBUG  # Monitor connection pool
+---
+# application-prod.yml
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://postgres:5432/metrichive_prod
+    username: ${DB_USERNAME:metrichive}
+    password: ${DB_PASSWORD:metrichive123}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: MetricHivePool
+  jpa:
+    hibernate:
+      ddl-auto: none  # IMPORTANT: No schema changes in production
+    show-sql: false
+  data:
+    redis:
+      host: redis
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 5
+  flyway:
+    enabled: true
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000
 
-# Actuator
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,metrics,prometheus
-  endpoint:
-    health:
-      show-details: always
-  metrics:
-    export:
-      prometheus:
-       enabled: true
-
-# Server
-server:
-  port: 8080
+---
+# application-test.yml
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false
