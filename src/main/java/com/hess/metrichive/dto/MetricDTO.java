@@ -21,5 +21,11 @@ public class MetricDTO {
     @PastOrPresent(message = "Timestamp cannot be in the future")
     private LocalDateTime timestamp;
 
-    private Map<String, String> tags;
+    private Map<
+            @NotBlank(message = "Tag name is missing ")
+            String,
+
+            @NotBlank(message = "Tag value cannot be empty")
+            String
+            > tags;
 }
