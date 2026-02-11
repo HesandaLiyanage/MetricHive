@@ -14,6 +14,7 @@ public class MetricDTO {
     private String name;
 
     @NotNull(message = "Value is required")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Value must be greater than 0")
     private Double value;
 
     @NotNull(message = "Timestamp is required")
