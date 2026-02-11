@@ -1,26 +1,42 @@
 services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_USERNAME=metrichive
+      - DB_PASSWORD=metrichive123
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - metrichive-network
+
   postgres:
     image: postgres:15-alpine
-    container_name: metrichive-db
+    container_name: metrichive-db-dev
     environment:
-      POSTGRES_DB: metrichive
+      POSTGRES_DB: metrichive_dev
       POSTGRES_USER: metrichive
       POSTGRES_PASSWORD: metrichive123
     ports:
-      - "5433:5432"  # ← Changed from 5432:5432 to 5433:5432
-      # Your Mac port 5433 maps to container's internal 5432
+      - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./infrastructure/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data_dev:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U metrichive"]
+      test: ["CMD-SHELL", "pg_isready -U metrichive -d metrichive_dev"]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - metrichive-network
 
   redis:
     image: redis:7-alpine
-    container_name: metrichive-redis
+    container_name: metrichive-redis-dev
     ports:
       - "6379:6379"
     healthcheck:
@@ -28,6 +44,12 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+    networks:
+      - metrichive-network
 
 volumes:
-  postgres_data:
+  postgres_data_dev:
+
+networks:
+  metrichive-network:
+    driver: bridge
