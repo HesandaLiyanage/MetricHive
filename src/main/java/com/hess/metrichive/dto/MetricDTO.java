@@ -10,6 +10,7 @@ public class MetricDTO {
 
     @NotBlank(message = "Metric name is required")
     @Size(max = 255, message = "Metric name too long")
+    @Pattern(regexp = "^[a-zA-Z0-9._-]+$" , message = "invalid format name, should follow the format 'namespace.metric_name' ex:- sales.revenue")
     private String name;
 
     @NotNull(message = "Value is required")
