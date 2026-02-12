@@ -34,7 +34,6 @@ public class DevelopmentDataLoader implements CommandLineRunner {
     }
 
     private void loadSampleData() {
-        // Create sample tenants
         Tenant devTenant = new Tenant();
         devTenant.setName("Development Tenant");
         devTenant.setEmail("dev@example.com");
@@ -63,7 +62,7 @@ public class DevelopmentDataLoader implements CommandLineRunner {
         Tenant savedTestTenant = tenantRepository.save(testTenant);
         Tenant savedStagingTenant = tenantRepository.save(stagingTenant);
 
-        // Create sample metrics
+       
         createSampleMetrics(savedDevTenant.getId());
         createSampleMetrics(savedTestTenant.getId());
         createSampleMetrics(savedStagingTenant.getId());
