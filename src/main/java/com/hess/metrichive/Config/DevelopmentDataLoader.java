@@ -62,7 +62,7 @@ public class DevelopmentDataLoader implements CommandLineRunner {
         Tenant savedTestTenant = tenantRepository.save(testTenant);
         Tenant savedStagingTenant = tenantRepository.save(stagingTenant);
 
-       
+
         createSampleMetrics(savedDevTenant.getId());
         createSampleMetrics(savedTestTenant.getId());
         createSampleMetrics(savedStagingTenant.getId());
