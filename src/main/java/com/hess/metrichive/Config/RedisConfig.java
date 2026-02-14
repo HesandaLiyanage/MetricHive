@@ -34,7 +34,7 @@ public class RedisConfig {
                         RedisSerializationContext
                                 .SerializationPair
                                 .fromSerializer(
-                                        new GenericJacksonJsonRedisSerializer()
+                                        new GenericJacksonJsonRedisSerializer(objectMapper)
                                 )
                 );
         return RedisCacheManager.builder(connectionFactory).cacheDefaults(redisCacheConfiguration).build();
