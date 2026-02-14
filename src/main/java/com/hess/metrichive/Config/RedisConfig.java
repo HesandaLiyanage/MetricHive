@@ -1,16 +1,13 @@
 package com.hess.metrichive.Config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hess.metrichive.dto.IngestRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.GenericJacksonJsonRedisSerializer;
-import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
@@ -20,20 +17,27 @@ public class RedisConfig {
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
 
-        GenericJackson2JsonRedisSerializer serializer =
-                new GenericJackson2JsonRedisSerializer();
+        GenericJacksonJsonRedisSerializer serializer = GenericJacksonJsonRedisSerializer
+                .builder()
+                .typePropertyName("@class")       // the field name embedded in JSON to store class info
+                .enableUnsafeDefaultTyping()       // same as activateDefaultTyping we talked about
+                .build();
 
 
-        RedisCacheConfiguration redisCacheConfiguration =  RedisCacheConfiguration.defaultCacheConfig()
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(10))
                 .disableCachingNullValues()
+                .serializeKeysWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(new StringRedisSerializer())
+                )
                 .serializeValuesWith(
-                        RedisSerializationContext
-                                .SerializationPair
-                                .fromSerializer(
-                                        new GenericJacksonJsonRedisSerializer(objectMapper)
-                                )
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(serializer)
                 );
-        return RedisCacheManager.builder(connectionFactory).cacheDefaults(redisCacheConfiguration).build();
+
+        return RedisCacheManager.builder(connectionFactory)
+                .cacheDefaults(config)
+                .build();
     }
 }
