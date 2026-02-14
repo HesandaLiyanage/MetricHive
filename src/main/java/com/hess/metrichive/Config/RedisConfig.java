@@ -1,5 +1,6 @@
 package com.hess.metrichive.Config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hess.metrichive.dto.IngestRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,14 @@ public class RedisConfig {
 
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.activateDefaultTyping(
+                objectMapper.getPolymorphicTypeValidator() ,
+                ObjectMapper.DefaultTyping.NON_FINAL
+        );
+
+
         RedisCacheConfiguration redisCacheConfiguration =  RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(10))
                 .disableCachingNullValues()
