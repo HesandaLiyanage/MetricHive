@@ -20,11 +20,8 @@ public class RedisConfig {
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.activateDefaultTyping(
-                objectMapper.getPolymorphicTypeValidator() ,
-                ObjectMapper.DefaultTyping.NON_FINAL
-        );
+        GenericJackson2JsonRedisSerializer serializer =
+                new GenericJackson2JsonRedisSerializer();
 
 
         RedisCacheConfiguration redisCacheConfiguration =  RedisCacheConfiguration.defaultCacheConfig()
