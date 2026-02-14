@@ -17,8 +17,8 @@ import java.time.Duration;
 public class RedisConfig {
 
     @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        RedisCacheConfiguration.defaultCacheConfig()
+    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory, RedisCacheManager redisCacheManager) {
+        RedisCacheConfiguration redisCacheConfiguration =  RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(10))
                 .disableCachingNullValues()
                 .serializeValuesWith(
@@ -28,5 +28,6 @@ public class RedisConfig {
                                         new JacksonJsonRedisSerializer<>(IngestRequest.class)
                                 )
                 );
+        return RedisCacheManager.builder(connectionFactory).cacheDefaults(redisCacheConfiguration).build();
     }
 }
