@@ -1,5 +1,6 @@
 package com.hess.metrichive.Config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -14,6 +15,9 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig {
 
+    @Value("${spring.cache.redis.time-to-live}")
+    public long ttl;
+
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
 
@@ -25,7 +29,7 @@ public class RedisConfig {
 
 
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(10))
+                .entryTtl(Duration.ofMinutes(ttl))
                 .disableCachingNullValues()
                 .serializeKeysWith(
                         RedisSerializationContext.SerializationPair
