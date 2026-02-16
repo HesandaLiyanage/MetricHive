@@ -5,7 +5,6 @@ import io.github.bucket4j.distributed.proxy.ProxyManager;
 import io.github.bucket4j.redis.lettuce.cas.LettuceBasedProxyManager;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
-import io.lettuce.core.api.sync.RedisCommands;
 import io.lettuce.core.codec.ByteArrayCodec;
 import io.lettuce.core.codec.RedisCodec;
 import io.lettuce.core.codec.StringCodec;
@@ -20,29 +19,20 @@ import java.time.Duration;
 public class Bucket4jConfig {
 
     @Bean
-    public StatefulRedisConnection<String, byte[]> redisConnection(
-            RedisConnectionFactory connectionFactory) {
-
-        LettuceConnectionFactory lettuceFactory =
-                (LettuceConnectionFactory) connectionFactory;
-
+    public ProxyManager<String> bucketProxyManager(RedisConnectionFactory connectionFactory) {
+        // 1. Get the native Lettuce client from Spring's connection factory
+        LettuceConnectionFactory lettuceFactory = (LettuceConnectionFactory) connectionFactory;
         RedisClient redisClient = (RedisClient) lettuceFactory.getNativeClient();
 
-        return redisClient.connect(
+        // 2. Connect using the specific codecs Bucket4j needs (String keys, byte[] values)
+        StatefulRedisConnection<String, byte[]> connection = redisClient.connect(
                 RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE)
         );
-    }
 
-    @Bean
-    public ProxyManager<String> bucketProxyManager(
-            StatefulRedisConnection<String, byte[]> redisConnection) {
-
-        return LettuceBasedProxyManager
-                .builderFor(redisConnection.async())   // <-- use async() not the connection itself
+        // 3. Build the ProxyManager using the newer builder pattern
+        return LettuceBasedProxyManager.builderFor(connection)
                 .withExpirationStrategy(
-                        ExpirationAfterWriteStrategy.basedOnTimeForRefillingBucketUpToMax(
-                                Duration.ofMinutes(1)
-                        )
+                        ExpirationAfterWriteStrategy.basedOnTimeForRefillingBucketUpToMax(Duration.ofMinutes(1))
                 )
                 .build();
     }
