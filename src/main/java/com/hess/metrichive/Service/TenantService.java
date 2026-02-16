@@ -16,6 +16,7 @@ import java.util.Optional;
 public class TenantService {
     public final TenantRepository tenantRepository;
 
+    @Cacheable(value = "tenant" , key = "#Id")
     public Optional<Tenant> tenantFind(Long Id) {
         Optional<Tenant> tenant = tenantRepository.findById(Id);
         return tenant;
