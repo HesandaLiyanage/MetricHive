@@ -1,13 +1,11 @@
 package com.hess.metrichive.Config;
 
-
-
-
 import io.github.bucket4j.distributed.ExpirationAfterWriteStrategy;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
 import io.github.bucket4j.redis.lettuce.cas.LettuceBasedProxyManager;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.sync.RedisCommands;
 import io.lettuce.core.codec.ByteArrayCodec;
 import io.lettuce.core.codec.RedisCodec;
 import io.lettuce.core.codec.StringCodec;
@@ -20,10 +18,11 @@ import java.time.Duration;
 
 @Configuration
 public class Bucket4jConfig {
+
+    @Bean
     public StatefulRedisConnection<String, byte[]> redisConnection(
             RedisConnectionFactory connectionFactory) {
 
-        // get the Lettuce client from Spring's connection factory
         LettuceConnectionFactory lettuceFactory =
                 (LettuceConnectionFactory) connectionFactory;
 
@@ -39,15 +38,12 @@ public class Bucket4jConfig {
             StatefulRedisConnection<String, byte[]> redisConnection) {
 
         return LettuceBasedProxyManager
-                .builderFor(redisConnection)
-                .withExpirationAfterWriteStrategy(
+                .builderFor(redisConnection.async())   // <-- use async() not the connection itself
+                .withExpirationStrategy(
                         ExpirationAfterWriteStrategy.basedOnTimeForRefillingBucketUpToMax(
                                 Duration.ofMinutes(1)
                         )
                 )
                 .build();
-        // ProxyManager is the thing that creates/manages buckets in Redis
-        // one bucket per API key, all stored in Redis
     }
-
 }
