@@ -56,6 +56,22 @@ spring:
     redis:
       time-to-live: 300000
 
+metrichive:
+  rate-limits:
+    plans:
+      free:
+        capacity: 20
+        refill-tokens: 20
+        refill-duration: 1m
+      basic:
+        capacity: 100
+        refill-tokens: 100
+        refill-duration: 1m
+      pro:
+        capacity: 1000
+        refill-tokens: 1000
+        refill-duration: 1m
+
 ---
 # application-prod.yml
 spring:
