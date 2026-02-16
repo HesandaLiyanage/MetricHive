@@ -18,6 +18,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // Apply this limit to your API routes
         registry.addInterceptor(rateLimitInterceptor)
-                .addPathPatterns("/api/**");
+                .addPathPatterns("/api/**")
+                .excludePathPatterns(
+                        "/api/auth/**",       // don't rate limit login/register
+                        "/actuator/**",       // don't rate limit health checks
+                        "/swagger-ui/**"      // don't rate limit docs;
+                );
     }
 }
