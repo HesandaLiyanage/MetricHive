@@ -1,6 +1,6 @@
 package com.hess.metrichive.Config;
 
-import com.hess.metrichive.interceptor.RateLimitInterceptor;
+import com.hess.metrichive.Infrastructure.RateLimit.RateLimitInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

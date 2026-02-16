@@ -16,11 +16,10 @@ public class Bucket4jConfig {
 
     @Bean
     public ProxyManager<String> bucketProxyManager(RedisConnectionFactory connectionFactory) {
-        // Grab the native Lettuce client from Spring's default Factory
         LettuceConnectionFactory lettuceFactory = (LettuceConnectionFactory) connectionFactory;
         RedisClient redisClient = (RedisClient) lettuceFactory.getNativeClient();
 
-        // Modern 8.x+ approach for Lettuce ProxyManager
+        // Use the Bucket4j 8.x entry point for Lettuce
         return Bucket4jLettuce.casBasedBuilder(redisClient)
                 .expirationAfterWrite(
                         ExpirationAfterWriteStrategy.basedOnTimeForRefillingBucketUpToMax(Duration.ofMinutes(2))
