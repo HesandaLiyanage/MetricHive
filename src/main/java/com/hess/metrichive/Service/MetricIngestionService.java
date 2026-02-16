@@ -18,6 +18,7 @@ public class MetricIngestionService {
         this.metricRepository = metricRepository;
     }
 
+
     public void ingestMetrics(Long tenantId, List<MetricDTO> metricDTOs) {
         log.info("Ingesting {} metrics for tenant {}" , metricDTOs.size());
 
