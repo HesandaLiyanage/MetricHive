@@ -57,10 +57,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.giffing.bucket4j.spring.boot.starter</groupId>
-            <artifactId>bucket4j-spring-boot-starter</artifactId>
-            <version>0.13.0</version>
-            <scope>compile</scope>
+            <groupId>com.bucket4j</groupId>
+            <artifactId>bucket4j-core</artifactId>
+            <version>8.10.1</version>
         </dependency>
         <dependency>
             <groupId>com.bucket4j</groupId>
