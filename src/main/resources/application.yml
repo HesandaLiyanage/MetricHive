@@ -12,7 +12,7 @@ spring:
 ---
 # application-dev.yml
 spring:
-  
+
   config:
     activate:
       on-profile: dev
