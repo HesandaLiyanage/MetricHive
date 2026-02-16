@@ -12,8 +12,7 @@ spring:
 ---
 # application-dev.yml
 spring:
-  rate-limiting:
-    
+  
   config:
     activate:
       on-profile: dev
