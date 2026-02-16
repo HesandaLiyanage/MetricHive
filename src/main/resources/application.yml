@@ -1,4 +1,4 @@
-# application.yml (base configuration)
+# application.yml (base configuration) add something in here if you want to apply it to every profile
 spring:
   profiles:
     active: dev  # Default to dev
@@ -8,6 +8,22 @@ spring:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
+
+metrichive:
+  rate-limits:
+    plans:
+      free:
+        capacity: 20
+        refill-tokens: 20
+        refill-duration: 1m
+      basic:
+        capacity: 100
+        refill-tokens: 100
+        refill-duration: 1m
+      pro:
+        capacity: 1000
+        refill-tokens: 1000
+        refill-duration: 1m
 
 ---
 # application-dev.yml
@@ -56,22 +72,6 @@ spring:
     redis:
       time-to-live: 300000
 
-metrichive:
-  rate-limits:
-    plans:
-      free:
-        capacity: 20
-        refill-tokens: 20
-        refill-duration: 1m
-      basic:
-        capacity: 100
-        refill-tokens: 100
-        refill-duration: 1m
-      pro:
-        capacity: 1000
-        refill-tokens: 1000
-        refill-duration: 1m
-
 ---
 # application-prod.yml
 spring:
@@ -80,7 +80,10 @@ spring:
       on-profile: prod
   datasource:
     url: jdbc:postgresql://postgres:5432/metrichive_prod
-    username: ${DB_USERNAME:metrichive}
+    username: ${DB_USERNAME:metrichive} # ❌ fallback exposed in source code, this is wrong. CHANGE IT
+    #WHY? BECAUSE IF db_username is wrong then it silently uses the other password. in production
+    #you shouldnt silently fail. fail loudly.
+    #password: ${DB_PASSWORD}  # ✅ throws error if not set — which is what you want
     password: ${DB_PASSWORD:metrichive123}
     driver-class-name: org.postgresql.Driver
     hikari:
@@ -110,6 +113,8 @@ spring:
     type: redis
     redis:
       time-to-live: 300000
+
+
 
 ---
 # application-test.yml
