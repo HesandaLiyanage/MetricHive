@@ -43,4 +43,6 @@ public class MetricController {
         return ResponseEntity.ok(Map.of("status" , "healthy"));
     }
 
+    
+
 }
