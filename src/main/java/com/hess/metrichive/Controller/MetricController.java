@@ -43,6 +43,11 @@ public class MetricController {
         return ResponseEntity.ok(Map.of("status" , "healthy"));
     }
 
-    
+    @PostMapping("/query")
+    public ResponseEntity<?> queryMetrics(@Valid @RequestBody QueryRequest request) {
+
+    }
+
+
 
 }
