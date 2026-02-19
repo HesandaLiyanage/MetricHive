@@ -1,5 +1,6 @@
 package com.hess.metrichive.Filter;
 
+import com.hess.metrichive.Model.Tenant;
 import com.hess.metrichive.Service.TenantService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,7 +30,8 @@ public class ApiKeyFilter extends OncePerRequestFilter {
             ServletException,
             IOException {
         String requestApiKey = request.getHeader("X-API-KEY");
-        Optional<String> apiKey = tenantService.findApiKey(requestApiKey);
+        Optional<Tenant> apiKey = tenantService.findApiKey(requestApiKey);
+        
 
     }
 }
