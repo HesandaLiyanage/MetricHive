@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class ApiKeyFilter extends OncePerRequestFilter {
@@ -27,6 +28,7 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     ) throws
             ServletException,
             IOException {
+        Optional<String> apiKey = 
 
     }
 }
