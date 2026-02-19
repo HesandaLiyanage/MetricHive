@@ -30,8 +30,9 @@ public class ApiKeyFilter extends OncePerRequestFilter {
             ServletException,
             IOException {
         String requestApiKey = request.getHeader("X-API-KEY");
-        Optional<Tenant> apiKey = tenantService.findApiKey(requestApiKey);
-        
+        String requestId = request.getHeader("id");
+        Optional<Tenant> apiKey = tenantService.findApiKey(requestId);
+
 
     }
 }
