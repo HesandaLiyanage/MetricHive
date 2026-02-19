@@ -60,6 +60,12 @@
             <artifactId>bucket4j-redis</artifactId>
             <version>8.10.1</version>
         </dependency>
+        <!-- dependency for  -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.0.0-jre</version>
+        </dependency>
 <!--        lettuce pool-->
         <dependency>
             <groupId>org.apache.commons</groupId>
