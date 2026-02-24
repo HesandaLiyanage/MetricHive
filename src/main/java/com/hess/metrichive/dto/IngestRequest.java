@@ -1,7 +1,6 @@
 package com.hess.metrichive.dto;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -9,9 +8,6 @@ import java.util.List;
 
 @Data
 public class IngestRequest {
-
-    @NotBlank(message = "API key is required")
-    private String apiKey;
 
     @NotEmpty(message = "Metrics list cannot be empty")
     @Size(max = 1000, message = "Maximum 1000 metrics per request")

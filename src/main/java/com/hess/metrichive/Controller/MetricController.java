@@ -1,54 +1,47 @@
 package com.hess.metrichive.Controller;
 
-
-import com.hess.metrichive.Model.Tenant;
-import com.hess.metrichive.Service.MetricIngestionService;
-import com.hess.metrichive.Service.TenantService;
 import com.hess.metrichive.dto.IngestRequest;
-import com.hess.metrichive.dto.QueryRequest;
+import com.hess.metrichive.dto.IngestResponse;
+import com.hess.metrichive.security.TenantContext;
+import com.hess.metrichive.Service.MetricIngestionService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/v1/metrics")
-@RequiredArgsConstructor
 @Slf4j
 public class MetricController {
-    public final MetricIngestionService metricIngestionService;
-    public final TenantService tenantService;
+
+    @Autowired
+    private MetricIngestionService metricIngestionService;
 
     @PostMapping("/ingest")
-    public ResponseEntity<?> ingestMetrics(@Valid @RequestBody IngestRequest request) {
-        log.info("Got a request to ingestion with {} metrics" , request.getMetrics());
+    public ResponseEntity<IngestResponse> ingest(@RequestBody @Valid IngestRequest request) {
 
+        // Start timer
+        long startTime = System.currentTimeMillis();
 
-        Tenant tenant = tenantService.findApiKey(request.getApiKey()).orElseThrow(
-                () -> new RuntimeException("Invalid API Key!")
-        );
+        // Get current tenant (from API key authentication)
+        Long tenantId = TenantContext.getTenantId();
 
-        metricIngestionService.ingestMetrics(tenant.getId(), request.getMetrics());
+        // Log
+        log.info("Ingesting {} metrics for tenant {}",
+                request.getMetrics().size(), tenantId);
 
-        return ResponseEntity.ok().body(Map.of(
-                "status" , "success",
-                "ingested" , request.getMetrics().size()
-        ));
+        // Call service to do the actual work
+        metricIngestionService.ingestBatch(request.getMetrics());
+
+        // Calculate processing time
+        long processingTime = System.currentTimeMillis() - startTime;
+
+        // Return response
+        return ResponseEntity.ok(IngestResponse.builder()
+                .status("success")
+                .metricsReceived(request.getMetrics().size())
+                .processingTimeMs(processingTime)
+                .build());
     }
-
-    @GetMapping("/health")
-    public ResponseEntity<?>  health() {
-        return ResponseEntity.ok(Map.of("status" , "healthy"));
-    }
-
-    @PostMapping("/query")
-    public ResponseEntity<?> queryMetrics(@Valid @RequestBody QueryRequest request) {
-
-    }
-
-
-
 }
