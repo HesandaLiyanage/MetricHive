@@ -28,7 +28,7 @@ public class Metric {
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
-    @JdbcTypeCode(SqlTypes.JSON)
+    @JdbcTypeCode(SqlTypes.JSON) //"Take this Java object, convert it into a JSON string, and save it in a JSON column in the database."
     @Column(columnDefinition = "jsonb")
     private Map<String, String> tags;
 
