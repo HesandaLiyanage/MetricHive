@@ -7,26 +7,39 @@ import lombok.Data;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Data
 public class QueryRequest {
 
     @NotBlank(message = "Metric Name is required")
-    public String metric_name;
+    private String metricName;
 
     @NotBlank(message = "Aggregation is required")
-    public String aggregation;
+    private String aggregation;
 
     @NotNull(message = "Start time is required")
-    public LocalDateTime start_time;
-    
+    private LocalDateTime startTime;
+
     @NotNull(message = "End time is required")
     private Instant endTime;
 
-    public Optional<String> interval;
-    public String[] groupBy;
+    private String interval;
 
-    public Optional<List<String>> Filters;
+    private List<String> groupBy;
+
+    private Map<String, String> filters;
+
+    private String orderBy; // value, timestamp, count
+
+    private String order; // asc, desc
+
+    private Integer limit; // default 100, max 1000
+
+    public String cacheKey() {
+        return String.format("%s:%s:%s:%s:%s",
+                metricName, aggregation, startTime, endTime, interval);
+    }
 
 }
