@@ -35,8 +35,14 @@ public class Metric {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @PrePersist
+//    @Column(name="updated_at")
+//    private LocalDateTime updatedAt;
+
+    @PrePersist //only runs when the object is created. so one time.
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
+
+//    @PreUpdate
+//    protected  void OnUpdate() { updatedAt = LocalDateTime.now(); }
 }
