@@ -44,6 +44,11 @@
             <version>7.0.3</version>
             <scope>compile</scope>
         </dependency>
+        <!-- spring secuirty-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
         <!-- db migrations -->
         <dependency>
             <groupId>org.flywaydb</groupId>
