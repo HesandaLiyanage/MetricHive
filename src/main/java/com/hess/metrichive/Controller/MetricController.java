@@ -2,7 +2,7 @@ package com.hess.metrichive.Controller;
 
 import com.hess.metrichive.dto.IngestRequest;
 import com.hess.metrichive.dto.IngestResponse;
-import com.hess.metrichive.security.TenantContext;
+import com.hess.metrichive.Security.TenantContext;
 import com.hess.metrichive.Service.MetricIngestionService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
