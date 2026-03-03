@@ -2,6 +2,7 @@ package com.hess.metrichive.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.time.Instant;
@@ -16,11 +17,12 @@ public class QueryRequest {
     @NotBlank(message = "Metric Name is required")
     private String metricName;
 
+    @Pattern(regexp = "^(value|timestamp|count)$", message = "OrderBy must be value, timestamp, or count")
     @NotBlank(message = "Aggregation is required")
     private String aggregation;
 
     @NotNull(message = "Start time is required")
-    private LocalDateTime startTime;
+    private Instant startTime;
 
     @NotNull(message = "End time is required")
     private Instant endTime;
