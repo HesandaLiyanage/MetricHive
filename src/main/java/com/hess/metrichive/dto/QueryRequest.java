@@ -27,14 +27,18 @@ public class QueryRequest {
     @NotNull(message = "End time is required")
     private Instant endTime;
 
+    @NotNull(message = "Interval is required")
+    @Pattern(regexp = "^(1m|5m|1h|1d|1w)$", message = "Interval must be 1m, 5m, 1h, 1d, or 1w")
     private String interval;
 
     private List<String> groupBy;
 
     private Map<String, String> filters;
 
+    @Pattern(regexp = "^(value|timestamp|count)$", message = "OrderBy must be value, timestamp, or count")
     private String orderBy; // value, timestamp, count
 
+    @Pattern(regexp = "^(asc|desc)$", message = "Order must be asc or desc")
     private String order; // asc, desc
 
     private Integer limit; // default 100, max 1000
