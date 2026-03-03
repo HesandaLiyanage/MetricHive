@@ -3,6 +3,9 @@ package com.hess.metrichive.Service;
 import com.hess.metrichive.Model.Metric;
 import com.hess.metrichive.Repository.MetricRepository;
 import com.hess.metrichive.dto.MetricDTO;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -40,4 +43,6 @@ public class MetricIngestionService {
         return metric;
     }
 
+    public void ingestBatch(@NotEmpty(message = "Metrics list cannot be empty") @Size(max = 1000, message = "Maximum 1000 metrics per request") @Valid List<MetricDTO> metrics) {
+    }
 }

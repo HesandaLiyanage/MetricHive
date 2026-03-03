@@ -4,6 +4,7 @@ import com.hess.metrichive.dto.IngestRequest;
 import com.hess.metrichive.dto.IngestResponse;
 import com.hess.metrichive.Security.TenantContext;
 import com.hess.metrichive.Service.MetricIngestionService;
+import com.hess.metrichive.dto.QueryRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,13 @@ public class MetricController {
         // Return response
         return ResponseEntity.ok(IngestResponse.builder()
                 .status("success")
-                .metricsReceived(request.getMetrics().size())
+                .metricsReceived(String.valueOf(request.getMetrics().size()))
                 .processingTimeMs(processingTime)
                 .build());
+    }
+
+    @PostMapping("/query")
+    public ResponseEntity<?> Query (@PathVariable QueryRequest request) {
+
     }
 }
