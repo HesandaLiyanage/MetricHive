@@ -47,10 +47,5 @@ public class MetricController {
                 .build());
     }
 
-    @PostMapping("/query")
-    public ResponseEntity<QueryResponse> Query (@PathVariable QueryRequest request) {
-        return ResponseEntity.ok(QueryResponse.builder()
-                .status("success"))
 
-    }
 }
