@@ -41,11 +41,8 @@ public class QueryRequest {
     @Pattern(regexp = "^(asc|desc)$", message = "Order must be asc or desc")
     private String order; // asc, desc
 
-    private Integer limit; // default 100, max 1000
+    private Integer limit = 100; // default 100, max 1000
 
-    public String cacheKey() {
-        return String.format("%s:%s:%s:%s:%s",
-                metricName, aggregation, startTime, endTime, interval);
-    }
+
 
 }
