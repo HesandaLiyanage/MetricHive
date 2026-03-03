@@ -5,6 +5,7 @@ import com.hess.metrichive.dto.IngestResponse;
 import com.hess.metrichive.Security.TenantContext;
 import com.hess.metrichive.Service.MetricIngestionService;
 import com.hess.metrichive.dto.QueryRequest;
+import com.hess.metrichive.dto.QueryResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,9 @@ public class MetricController {
     }
 
     @PostMapping("/query")
-    public ResponseEntity<?> Query (@PathVariable QueryRequest request) {
+    public ResponseEntity<QueryResponse> Query (@PathVariable QueryRequest request) {
+        return ResponseEntity.ok(QueryResponse.builder()
+                .status("success"))
 
     }
 }
