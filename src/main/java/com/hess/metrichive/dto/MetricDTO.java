@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class MetricDTO {
 
     @NotBlank(message = "Metric name is required")
