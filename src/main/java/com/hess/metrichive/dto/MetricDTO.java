@@ -2,6 +2,9 @@ package com.hess.metrichive.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.annotation.JsonNaming;
+
 import java.time.LocalDateTime;
 import java.util.Map;
 
