@@ -11,6 +11,6 @@ public class IngestRequest {
 
     @NotEmpty(message = "Metrics list cannot be empty")
     @Size(max = 1000, message = "Maximum 1000 metrics per request")
-    @Valid
+    @Valid //this ensures rules inside metricdto is also applied
     private List<MetricDTO> metrics;
 }
