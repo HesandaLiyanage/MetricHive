@@ -47,6 +47,8 @@ public class MetricRepository {
                 }
             }
 
+
+            //this shows how many records have been saved
             @Override
             public int getBatchSize() {
                 return metrics.size();
