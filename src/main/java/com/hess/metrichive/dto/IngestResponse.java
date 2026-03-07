@@ -11,7 +11,7 @@ import tools.jackson.databind.annotation.JsonNaming;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class IngestResponse {
     public String status;
-    public String metricsReceived;
+    public int metricsReceived;
     public long processingTimeMs;
     public String requestId;
 
