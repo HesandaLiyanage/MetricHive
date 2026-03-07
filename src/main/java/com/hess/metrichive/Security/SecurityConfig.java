@@ -25,7 +25,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         // Allow health checks to pass through without an API key
-                        .requestPathMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/actuator/health").permitAll()
                         // Require authentication for EVERYTHING else (including /api/v1/metrics/ingest)
                         .anyRequest().authenticated()
                 )
