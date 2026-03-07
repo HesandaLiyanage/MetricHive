@@ -65,6 +65,14 @@
             <artifactId>bucket4j-redis</artifactId>
             <version>8.10.1</version>
         </dependency>
+        <!-- fasterxml object mapper related-->
+        <!-- Source: https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.21.1</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- dependency for  -->
         <dependency>
             <groupId>com.google.guava</groupId>
