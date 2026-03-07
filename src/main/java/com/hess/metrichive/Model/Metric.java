@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -26,7 +28,7 @@ public class Metric {
     private Double value;
 
     @Column(nullable = false)
-    private LocalDateTime timestamp;
+    private Instant timestamp;
 
     @JdbcTypeCode(SqlTypes.JSON) //"Take this Java object, convert it into a JSON string, and save it in a JSON column in the database."
     @Column(columnDefinition = "jsonb")

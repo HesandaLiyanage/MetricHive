@@ -99,7 +99,7 @@ public class DevelopmentDataLoader implements CommandLineRunner {
         memTags.put("host", "server-01");
         memTags.put("region", "us-east");
         memUsage.setTags(memTags);
-        metricsToBatchInsert.add(memUsage);.
+        metricsToBatchInsert.add(memUsage);
 
         // HTTP Requests metric
         Metric httpRequests = new Metric();
