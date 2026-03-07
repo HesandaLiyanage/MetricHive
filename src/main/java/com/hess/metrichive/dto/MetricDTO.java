@@ -5,6 +5,7 @@ import lombok.Data;
 import tools.jackson.databind.PropertyNamingStrategies;
 import tools.jackson.databind.annotation.JsonNaming;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class MetricDTO {
 
     @NotNull(message = "Timestamp is required")
     @PastOrPresent(message = "Timestamp cannot be in the future")
-    private LocalDateTime timestamp;
+    private Instant timestamp;
 
     private Map<
             @NotBlank(message = "Tag name is missing ")
