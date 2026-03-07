@@ -1,5 +1,6 @@
 package com.hess.metrichive.Security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,25 +8,30 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final ApiKeyAuthFilter apiKeyAuthFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 1. Disable CSRF (Cross-Site Request Forgery) because we are a stateless API, not a browser app
                 .csrf(AbstractHttpConfigurer::disable)
-
-                // 2. Tell Spring we won't be using server-side sessions (no JSESSIONID cookies)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // 3. For right this second, allow all requests so we can test Phase 1.
-                // We will change this to .authenticated() in Phase 2!
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
-                );
+                        // Allow health checks to pass through without an API key
+                        .requestPathMatchers("/actuator/health").permitAll()
+                        // Require authentication for EVERYTHING else (including /api/v1/metrics/ingest)
+                        .anyRequest().authenticated()
+                )
+
+                // Insert our custom Gatekeeper BEFORE Spring's default security filters
+                .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
