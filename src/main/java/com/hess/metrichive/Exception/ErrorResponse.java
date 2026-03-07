@@ -1,20 +1,19 @@
 package com.hess.metrichive.Exception;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import tools.jackson.databind.PropertyNamingStrategy;
+import tools.jackson.databind.PropertyNamingStrategies;
 import tools.jackson.databind.annotation.JsonNaming;
 
 import java.time.Instant;
 
 @Data
 @Builder
-@JsonNaming(PropertyNamingStrategy.class)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 
 public class ErrorResponse {
+    @Builder.Default
     private String status = "error";
     private String errorCode;
     private String message;
