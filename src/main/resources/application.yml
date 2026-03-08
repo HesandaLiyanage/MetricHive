@@ -28,6 +28,9 @@ metrichive:
 ---
 # application-dev.yml
 spring:
+  sql:
+    init:
+      mode: always
 
   config:
     activate:
