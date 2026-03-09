@@ -24,3 +24,8 @@ Used Caffeine (local) first and then switched to Redis. The reason: if I run mul
 What I gave up: extra network hop on every cache read. Also cache invalidation is genuinely hard — stale data, cache stampedes, all that.
 What I'd do differently: set strict TTLs on every cached key from day one. Learned this the hard way — without TTLs you're just waiting for an OOM error eventually.
 
+When it comes to implementing rate limiting on redis. I got few issues. like how am i gonna implement this ?  is it like ok 1 API get 1000 calls per minute if they exceed it then its over. 
+But my case was like , what if they actually want to send that much of api calls ?  maybe starbucks might sent over 100,000 api calls per minute from all around the world , around 1pm right ?
+So the thing is to rate limit but with IP address as well. So for this IP address and this API only this much of calls can be made for a minute. 
+And then... another issue. whats up if i got an DDOS attack  ? So for that i got multiple options and I went with Device fingerprint (canvas, WebGL, screen resolution hashed together) + API. 
+But this isnt enough. Why ? 
