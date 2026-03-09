@@ -28,4 +28,5 @@ When it comes to implementing rate limiting on redis. I got few issues. like how
 But my case was like , what if they actually want to send that much of api calls ?  maybe starbucks might sent over 100,000 api calls per minute from all around the world , around 1pm right ?
 So the thing is to rate limit but with IP address as well. So for this IP address and this API only this much of calls can be made for a minute. 
 And then... another issue. whats up if i got an DDOS attack  ? So for that i got multiple options and I went with Device fingerprint (canvas, WebGL, screen resolution hashed together) + API. 
-But this isnt enough. Why ? 
+But this isnt enough. Why ? Because the point of DDOS attack is never to enter to your application. Its to exhaust your server. So we need something from outside to stop this
+so currently im planning to implemmet some cloudflare security feature to stop this. 
