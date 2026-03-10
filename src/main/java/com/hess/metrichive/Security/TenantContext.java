@@ -1,22 +1,21 @@
 package com.hess.metrichive.Security;
 
+import com.hess.metrichive.Model.Tenant;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TenantContext {
-    // ThreadLocal ensures that each concurrent HTTP request gets its own isolated variable
-    private static final ThreadLocal<Long> currentTenantId = new ThreadLocal<>();
+    private static final ThreadLocal<Tenant> currentTenant = new ThreadLocal<>();
 
-    public static void setTenantId(Long tenantId) {
-        currentTenantId.set(tenantId);
+    public static void setTenant(Tenant tenant) {
+        currentTenant.set(tenant);
     }
 
-    public static Long getTenantId() {
-        return currentTenantId.get();
+    public static Tenant getTenant() {
+        return currentTenant.get();
     }
 
-    // CRITICAL: This prevents massive security leaks
     public static void clear() {
-        currentTenantId.remove();
+        currentTenant.remove();
     }
 }
