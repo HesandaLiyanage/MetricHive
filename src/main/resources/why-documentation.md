@@ -42,4 +42,4 @@ Then why we need to hit the database again. we already have the tenant data on t
 But Qs ? is it going to make the thread bigger ? No
 No. In Java, objects live on the Heap. The ThreadLocal variable simply holds a reference (a memory address, which is exactly 8 bytes on a 64-bit JVM) pointing to where that Tenant object lives in the Heap. It adds zero meaningful weight to the thread.
 What about the security ?  No issue. ThreadLocal is isolated between threads. So if you on one thread then you can not access the threadlocale on another thread
-But make sure to clean up though.
+But make sure to clean up though. The moment a request hits your tomcat , tomcat automatically assigns a new thread to it.
