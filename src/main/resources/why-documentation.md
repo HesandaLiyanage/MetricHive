@@ -33,3 +33,6 @@ so currently im planning to implemmet some cloudflare security feature to stop t
 Ahh waitt
 
 I cant use device fingerprints because we just making API calls. It's for browsers not APIs. So in here we are going to combine API with IP Address. 
+
+ThreadContext > Redis > Database
+
