@@ -38,3 +38,6 @@ ThreadContext > Redis > Database
 
 For this we are using threadcontenxt to check the rate limiting again, why  ? to check the correct API auth key we already hit the database once and got the tenant object to the thread context
 Then why we need to hit the database again. we already have the tenant data on the tanant Context.
+
+But Qs ? is it going to make the thread bigger ? No
+No. In Java, objects live on the Heap. The ThreadLocal variable simply holds a reference (a memory address, which is exactly 8 bytes on a 64-bit JVM) pointing to where that Tenant object lives in the Heap. It adds zero meaningful weight to the thread.
