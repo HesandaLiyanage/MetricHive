@@ -36,3 +36,5 @@ I cant use device fingerprints because we just making API calls. It's for browse
 
 ThreadContext > Redis > Database
 
+For this we are using threadcontenxt to check the rate limiting again, why  ? to check the correct API auth key we already hit the database once and got the tenant object to the thread context
+Then why we need to hit the database again. we already have the tenant data on the tanant Context.
