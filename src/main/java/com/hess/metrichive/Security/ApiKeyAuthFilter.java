@@ -62,7 +62,7 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
         try {
             // Set our custom context for business logic
-            TenantContext.setTenantId(tenant.getId());
+            TenantContext.setTenant(tenant);
 
             // Tell Spring Security that this request is officially authenticated
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(

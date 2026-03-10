@@ -1,5 +1,6 @@
 package com.hess.metrichive.Controller;
 
+import com.hess.metrichive.Model.Tenant;
 import com.hess.metrichive.dto.IngestRequest;
 import com.hess.metrichive.dto.IngestResponse;
 import com.hess.metrichive.Security.TenantContext;
@@ -23,7 +24,9 @@ public class MetricController {
         long startTime = System.currentTimeMillis();
 
         // 1. Get current tenant from the security context
-        Long tenantId = TenantContext.getTenantId();
+        Tenant tenant = TenantContext.getTenant();
+        Long tenantId  = tenant.getId();
+
 
         log.info("Received {} metrics for ingestion from tenant {}", request.getMetrics().size(), tenantId);
 
