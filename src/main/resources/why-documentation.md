@@ -48,3 +48,5 @@ walks down in the filter chain in the spring security.
 Qs - then why the fuck you didnt move everything to the threadlocal ?  it would've been faster right ?  all the static ones as well
 .but no its not the standard way to do it. you usually move the request related data to it.(User id , API key , IP address)
 Static variables are belongs to a class. so those variables are shared across the entire application 
+
+Documentation change - march 13
