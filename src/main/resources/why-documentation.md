@@ -50,3 +50,5 @@ Qs - then why the fuck you didnt move everything to the threadlocal ?  it would'
 Static variables are belongs to a class. so those variables are shared across the entire application 
 
 Documentation change - march 13
+MDC - 
+Mapped diagnostic context. for the phase 4 of optimisations I'm implementing  MDC. what is MDC ? 
