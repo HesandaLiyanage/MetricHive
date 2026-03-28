@@ -64,6 +64,9 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
             // Set our custom context for business logic
             TenantContext.setTenant(tenant);
 
+            // Tell the logger who the tenant is (MDC)
+            org.slf4j.MDC.put("tenant_id", String.valueOf(tenant.getId()));
+
             // Tell Spring Security that this request is officially authenticated
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                     tenant.getId(), null, Collections.emptyList());
