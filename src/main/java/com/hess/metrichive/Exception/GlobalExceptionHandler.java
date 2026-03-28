@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response); // 422 Status
     }
-
+ 
     // 2. Handles malformed JSON (e.g., a missing comma in the request body)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleMalformedJson(HttpMessageNotReadableException ex) {
