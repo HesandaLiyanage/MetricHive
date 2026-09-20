@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: metrichive-service-monitor
+  namespace: default
+  labels:
+    app: metrichive
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: metrichive
+  endpoints:
+    - port: http
+      path: /actuator/prometheus
+      interval: 10s
+      scrapeTimeout: 5s

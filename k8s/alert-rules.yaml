@@ -1,0 +1,44 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: metrichive-alerts
+  namespace: monitoring
+  labels:
+    app: metrichive
+    release: prometheus
+spec:
+  groups:
+    - name: metrichive-api-alerts
+      rules:
+        - alert: HighErrorRate
+          expr: (sum(rate(http_server_requests_seconds_count{status=~"5.."}[5m])) / sum(rate(http_server_requests_seconds_count[5m]))) * 100 > 5
+          for: 2m
+          labels:
+            severity: critical
+            service: metrichive
+          annotations:
+            summary: "High 5xx error rate on MetricHive service"
+            description: "HTTP 5xx error rate is {{ $value | printf \"%.2f\" }}%, exceeding the 5% threshold over a 5-minute window."
+            runbook_url: "https://github.com/HesandaLiyanage/MetricHive/blob/main/RUNBOOK.md#section-2-alert-higherrorrate"
+
+        - alert: DatabaseConnectionPoolExhaustion
+          expr: (sum(hikaricp_connections_active{application="metrichive"}) / sum(hikaricp_connections_max{application="metrichive"})) * 100 > 80
+          for: 2m
+          labels:
+            severity: warning
+            service: metrichive
+          annotations:
+            summary: "HikariCP database connection pool near saturation"
+            description: "MetricHive active database connections are at {{ $value | printf \"%.2f\" }}% of maximum pool capacity (>80%)."
+            runbook_url: "https://github.com/HesandaLiyanage/MetricHive/blob/main/RUNBOOK.md#section-3-alert-databaseconnectionpoolexhaustion"
+
+        - alert: PodCrashLooping
+          expr: rate(kube_pod_container_status_restarts_total{namespace="default", container="metrichive"}[5m]) * 60 > 0.5
+          for: 2m
+          labels:
+            severity: critical
+            service: metrichive
+          annotations:
+            summary: "MetricHive pod is crash looping"
+            description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has restarted repeatedly within the last 5 minutes."
+            runbook_url: "https://github.com/HesandaLiyanage/MetricHive/blob/main/RUNBOOK.md#section-4-alert-podcrashlooping"
