@@ -10,7 +10,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Stage 2: Minimal runtime stage
-FROM eclipse-temurin:21-jre-alpine AS runtime
+FROM eclipse-temurin:24-jre-alpine AS runtime
 
 # Security: Create non-root system group and user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
