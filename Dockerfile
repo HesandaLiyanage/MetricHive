@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-FROM maven:3.9-eclipse-temurin-21-alpine AS builder
+FROM maven:3-eclipse-temurin-24-alpine AS builder
 WORKDIR /build
 
 # Copy dependency definition and source code
