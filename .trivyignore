@@ -1,0 +1,9 @@
+# .trivyignore
+# Security vulnerability suppressions with documented mitigations and upstream status.
+
+# CVE-2026-40976: Spring Boot security bypass due to ineffective default web security auto-configuration.
+# Upstream status: Fixed in 4.0.6 which is not yet available in public Maven repositories.
+# Application mitigation: MetricHive completely overrides Spring Boot default web security by providing
+# an explicit, customized SecurityFilterChain and RateLimitFilter for API authentication, eliminating
+# reliance on the vulnerable default fallback security configuration.
+CVE-2026-40976

@@ -3,8 +3,6 @@ package com.hess.metrichive.Exception;
 
 import lombok.Builder;
 import lombok.Data;
-import tools.jackson.databind.PropertyNamingStrategies;
-import tools.jackson.databind.annotation.JsonNaming;
 
 import java.time.Instant;
 

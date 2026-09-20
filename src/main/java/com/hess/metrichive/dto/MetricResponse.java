@@ -27,7 +27,9 @@ public class MetricResponse {
     private LocalDateTime createdAt;
 
     public static MetricResponse from(Metric metric) {
-        if (metric == null) return null;
+        if (metric == null) {
+            return null;
+        }
         return MetricResponse.builder()
                 .id(metric.getId())
                 .tenantId(metric.getTenantId())

@@ -42,7 +42,7 @@ public class RedisRateLimitConfig {
     private static class InMemoryStringProxyManager extends AbstractCompareAndSwapBasedProxyManager<String> {
         private final ConcurrentHashMap<String, byte[]> stateMap = new ConcurrentHashMap<>();
 
-        public InMemoryStringProxyManager() {
+        InMemoryStringProxyManager() {
             super(ClientSideConfig.getDefault());
         }
 
