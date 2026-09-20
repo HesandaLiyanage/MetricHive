@@ -156,7 +156,9 @@ public class MetricRepository {
     }
 
     private String getSqlAggregationFunction(String agg) {
-        if (agg == null) return "AVG(\"value\")";
+        if (agg == null) {
+            return "AVG(\"value\")";
+        }
         return switch (agg.toLowerCase()) {
             case "sum" -> "SUM(\"value\")";
             case "min" -> "MIN(\"value\")";
@@ -168,7 +170,9 @@ public class MetricRepository {
 
     private String getBucketExpression(String interval) {
         boolean isPg = isPostgreSQL();
-        if (interval == null) return "date_trunc('minute', timestamp)";
+        if (interval == null) {
+            return "date_trunc('minute', timestamp)";
+        }
         return switch (interval.toLowerCase()) {
             case "5m" -> isPg
                     ? "to_timestamp(floor(extract(epoch from timestamp) / 300) * 300)"

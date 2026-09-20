@@ -27,7 +27,9 @@ public class TenantResponse {
     private LocalDateTime updatedAt;
 
     public static TenantResponse from(Tenant tenant) {
-        if (tenant == null) return null;
+        if (tenant == null) {
+            return null;
+        }
         return TenantResponse.builder()
                 .id(tenant.getId())
                 .name(tenant.getName())
