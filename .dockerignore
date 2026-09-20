@@ -1,0 +1,8 @@
+target/
+build/
+.git
+.gitignore
+.idea
+*.md
+infra/
+k8s/

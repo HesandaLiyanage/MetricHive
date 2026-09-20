@@ -1,12 +1,16 @@
 services:
   app:
     build: .
+    image: metrichive:local
     ports:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/metrichive_dev
       - DB_USERNAME=metrichive
       - DB_PASSWORD=metrichive123
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
     depends_on:
       postgres:
         condition: service_healthy
