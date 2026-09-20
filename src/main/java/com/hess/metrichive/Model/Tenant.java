@@ -1,12 +1,18 @@
 package com.hess.metrichive.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tenants")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tenant {
 
     @Id
@@ -23,12 +29,15 @@ public class Tenant {
     private String apiKey;
 
     @Column(length = 50)
+    @Builder.Default
     private String tier = "free";
 
     @Column(name = "max_metrics_per_day")
+    @Builder.Default
     private Integer maxMetricsPerDay = 10000;
 
     @Column(name = "max_requests_per_minute")
+    @Builder.Default
     private Integer maxRequestsPerMinute = 60;
 
     @Column(name = "created_at")

@@ -1,7 +1,10 @@
 package com.hess.metrichive.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -10,8 +13,11 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Entity
-@Table(name = "metrics")
+@Table(name = "metrics_raw")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Metric {
 
     @Id
@@ -24,7 +30,7 @@ public class Metric {
     @Column(name = "metric_name", nullable = false)
     private String metricName;
 
-    @Column(nullable = false)
+    @Column(name = "\"value\"", nullable = false)
     private Double value;
 
     @Column(nullable = false)

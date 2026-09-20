@@ -8,4 +8,7 @@ import java.util.Optional;
 @Repository
 public interface TenantRepository extends JpaRepository<Tenant, Long> {
     Optional<Tenant> findByApiKey(String apiKey);
+    Optional<Tenant> findByEmail(String email);
+    boolean existsByEmail(String email);
+    boolean existsByApiKey(String apiKey);
 }

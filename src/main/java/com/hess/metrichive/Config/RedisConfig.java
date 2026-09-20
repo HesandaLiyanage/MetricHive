@@ -2,6 +2,7 @@ package com.hess.metrichive.Config;
 
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -16,10 +17,11 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig {
 
-    @Value("${spring.cache.redis.time-to-live}")
+    @Value("${spring.cache.redis.time-to-live:300000}")
     public long ttl;
 
     @Bean
+    @ConditionalOnProperty(name = "spring.cache.type", havingValue = "redis", matchIfMissing = true)
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
 
         GenericJacksonJsonRedisSerializer serializer = GenericJacksonJsonRedisSerializer

@@ -25,9 +25,13 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        // Allow health checks to pass through without an API key
-                        .requestMatchers("/actuator/health").permitAll()
-                        // Require authentication for EVERYTHING else (including /api/v1/metrics/ingest)
+                        // Allow health checks and actuator endpoints to pass through without an API key
+                        .requestMatchers("/actuator/**").permitAll()
+                        // Allow new tenant registration without an existing API key
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/tenants").permitAll()
+                        // Allow swagger/openapi documentation if present
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        // Require authentication for EVERYTHING else (including /api/v1/metrics/**, /api/v1/tenants/me, etc.)
                         .anyRequest().authenticated()
                 )
 

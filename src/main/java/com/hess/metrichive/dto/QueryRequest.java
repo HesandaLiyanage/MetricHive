@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.annotation.JsonNaming;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -12,12 +14,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @Data
+@tools.jackson.databind.annotation.JsonNaming(tools.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy.class)
+@com.fasterxml.jackson.databind.annotation.JsonNaming(com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class QueryRequest {
 
     @NotBlank(message = "Metric Name is required")
     private String metricName;
 
-    @Pattern(regexp = "^(value|timestamp|count)$", message = "OrderBy must be value, timestamp, or count")
+    @Pattern(regexp = "^(?i)(avg|sum|min|max|count)$", message = "Aggregation must be avg, sum, min, max, or count")
     @NotBlank(message = "Aggregation is required")
     private String aggregation;
 

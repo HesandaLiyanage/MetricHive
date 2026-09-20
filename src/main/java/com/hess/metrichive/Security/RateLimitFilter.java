@@ -71,17 +71,21 @@ public class RateLimitFilter extends OncePerRequestFilter {
         byte[] tenantKey = ("rate_limit_tenant_" + tenant.getId()).getBytes();
         Bucket tenantBucket = proxyManager.builder().build(tenantKey, tenantConfigSupplier);
 
-        // 4. Sequential Bucket Checks
-        if (!ipBucket.tryConsume(1)) {
-            log.warn("IP rate limit exceeded for Tenant ID: {} at IP: {}", tenant.getId(), clientIp);
-            sendTooManyRequestsError(response, "Branch IP rate limit exceeded. Limit is 200 req/min.");
-            return;
-        }
+        // 4. Sequential Bucket Checks with resilient fallback
+        try {
+            if (!ipBucket.tryConsume(1)) {
+                log.warn("IP rate limit exceeded for Tenant ID: {} at IP: {}", tenant.getId(), clientIp);
+                sendTooManyRequestsError(response, "Branch IP rate limit exceeded. Limit is 200 req/min.");
+                return;
+            }
 
-        if (!tenantBucket.tryConsume(1)) {
-            log.warn("Global rate limit exceeded for Tenant ID: {}", tenant.getId());
-            sendTooManyRequestsError(response, "Global tenant rate limit exceeded.");
-            return;
+            if (!tenantBucket.tryConsume(1)) {
+                log.warn("Global rate limit exceeded for Tenant ID: {}", tenant.getId());
+                sendTooManyRequestsError(response, "Global tenant rate limit exceeded.");
+                return;
+            }
+        } catch (Exception e) {
+            log.warn("Rate limit check bypassed due to Redis connection issue: {}", e.getMessage());
         }
 
         filterChain.doFilter(request, response);
@@ -91,11 +95,12 @@ public class RateLimitFilter extends OncePerRequestFilter {
         response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
+        String reqId = org.slf4j.MDC.get("request_id");
         ErrorResponse error = ErrorResponse.builder()
                 .errorCode("RATE_LIMIT_EXCEEDED")
                 .message(message)
                 .timestamp(Instant.now())
-                .requestId("req_pending_phase4")
+                .requestId(reqId != null ? reqId : "req_unknown")
                 .build();
 
         response.getWriter().write(objectMapper.writeValueAsString(error));

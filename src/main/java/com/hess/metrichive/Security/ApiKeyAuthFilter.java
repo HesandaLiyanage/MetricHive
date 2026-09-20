@@ -3,7 +3,7 @@ package com.hess.metrichive.Security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hess.metrichive.Exception.ErrorResponse;
 import com.hess.metrichive.Model.Tenant;
-import com.hess.metrichive.Repository.TenantRepository;
+import com.hess.metrichive.Service.TenantService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ import java.util.Optional;
 @Slf4j
 public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
-    private final TenantRepository tenantRepository;
+    private final TenantService tenantService;
     private final ObjectMapper objectMapper; // To format JSON errors
 
     @Override
@@ -48,8 +48,8 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 3. Verify the key against the database
-        Optional<Tenant> tenantOpt = tenantRepository.findByApiKey(apiKey);
+        // 3. Verify the key against the database / Redis cache
+        Optional<Tenant> tenantOpt = tenantService.findApiKey(apiKey);
 
         if (tenantOpt.isEmpty()) {
             // Fake or revoked API key! Kick them out immediately.
@@ -86,11 +86,12 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
+        String reqId = org.slf4j.MDC.get("request_id");
         ErrorResponse error = ErrorResponse.builder()
                 .errorCode("UNAUTHORIZED")
                 .message(message)
                 .timestamp(Instant.now())
-                .requestId("req_pending_phase4")
+                .requestId(reqId != null ? reqId : "req_unknown")
                 .build();
 
         response.getWriter().write(objectMapper.writeValueAsString(error));
