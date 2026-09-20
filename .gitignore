@@ -44,3 +44,14 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
+
+### OS & Environment ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.env
+*.log
