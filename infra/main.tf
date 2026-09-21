@@ -57,3 +57,12 @@ module "rds" {
   instance_class       = var.rds_instance_class
   multi_az             = var.rds_multi_az
 }
+
+# EC2 Module: Application Host Instance inside the public subnet
+module "ec2" {
+  source              = "./modules/ec2"
+  environment         = var.environment
+  vpc_id              = module.vpc.vpc_id
+  subnet_id           = module.vpc.public_subnet_ids[0]
+  allowed_cidr_blocks = [module.vpc.vpc_cidr_block]
+}
