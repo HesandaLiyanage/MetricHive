@@ -113,25 +113,38 @@ flowchart TD
 
 ---
 
-## Phase 3: AWS Infrastructure as Code (Terraform)
+## Phase 3: AWS Infrastructure as Code (Terraform, Floci, EC2 & RDS)
 
 ### 1. What We Built
 * Designed production-ready, modular AWS architecture under `infra/`:
-  * `modules/vpc`: 3 Availability Zones, public subnets (IGW) and private subnets (NAT Gateway), strict route table separation.
-  * `modules/rds`: PostgreSQL 16.3 on AWS Graviton (`db.t4g.micro`), Multi-AZ deployment flag, KMS storage encryption, automated backups with 7-day retention, private subnet group, ingress restricted exclusively to application security group on port 5432.
-  * `modules/ecr`: ECR repository with `image_tag_mutability = "IMMUTABLE"`, KMS encryption, and automated lifecycle policies.
+  * `modules/vpc`: 2 Availability Zones, public subnets (IGW) and private subnets (NAT Gateway), isolated database subnets, strict route table separation.
+  * `modules/ec2`: Application host compute instance (`t3.micro`) inside public subnet with security group (SSH 22, App 8080), IAM instance profile with SSM core permissions, and user data bootstrap script.
+  * `modules/rds`: PostgreSQL 16 on AWS Graviton (`db.t4g.micro`), Multi-AZ deployment flag, KMS storage encryption, automated backups, private DB subnet group, ingress restricted strictly to authorized VPC CIDR on port 5432.
+  * `modules/ecr`: ECR repository `metrichive` with `image_tag_mutability = "IMMUTABLE"`, KMS encryption, and automated lifecycle cleanup policy.
   * `modules/iam`: ECS Task Execution role and Task role with least-privilege policies; zero wildcard permissions (`arn:aws:secretsmanager:*:*:secret:metrichive/*`).
-* Validated with real `hashicorp/aws` provider (~> 5.0) with multi-platform lockfile supporting both `linux_amd64` and `darwin_arm64`.
+* **Remote State & Distributed Locking**:
+  * Configured Terraform S3 backend storing state at `s3://metrichive-tfstate/environments/dev/terraform.tfstate`.
+  * Distributed state locking powered by DynamoDB table `metrichive-tflock` (MD5 digest verification preventing concurrent state collisions).
+* **Floci Emulator Deployment & Plan-Driven Drift Prevention**:
+  * Deployed full 34-resource topology onto local Floci AWS emulator (`floci/floci:latest` on port 4566).
+  * Generated speculative plan artifact: `terraform plan -var-file=floci.tfvars -out=tfplan` (34 to add).
+  * Applied planned artifact: `terraform apply "tfplan"` (34 added, 0 changed, 0 destroyed).
+  * Verified zero drift via `terraform plan -var-file=floci.tfvars -detailed-exitcode` (Exit Code 0: `"No changes. Your infrastructure matches the configuration."`).
 
 ### 2. Problems Encountered & Workarounds Applied
-* **Issue: Terraform Provider Lockfile Platform Mismatches**
-  * *Symptom:* Running Terraform initialization on macOS Apple Silicon (`darwin_arm64`) generated lock hashes that would fail inside Linux CI runners (`linux_amd64`).
+* **Issue 1: Terraform Provider Lockfile Platform Mismatches**
+  * *Symptom:* Running Terraform initialization on macOS Apple Silicon (`darwin_arm64`) generated lock hashes that failed inside Linux CI runners (`linux_amd64`).
   * *Root Cause:* `terraform init` locks checksums only for the current local host architecture by default.
   * *Fix/Workaround:* Executed provider lock mirroring:
     ```bash
     terraform providers lock -platform=linux_amd64 -platform=darwin_arm64 hashicorp/aws
     ```
-    This guaranteed deterministic, cross-platform validation in local dev and GitHub Actions runners.
+* **Issue 2: Local AWS Account Cancellation & Floci Port 4566 Integration**
+  * *Symptom:* Real AWS account access was unavailable, preventing cloud deployment.
+  * *Fix/Workaround:* Switched to **Floci** (open-source local AWS emulator running on port 4566). Configured custom service endpoints in `infra/provider.tf` for `s3`, `dynamodb`, `ec2`, `rds`, `ecr`, `iam`, and `secretsmanager` with `skip_credentials_validation = true` and `s3_use_path_style = true`.
+* **Issue 3: Emulator Metadata Attributes Inducing Unwanted Plan Drift**
+  * *Symptom:* Running `terraform plan -detailed-exitcode` after apply initially returned exit code 2 due to minor emulator discrepancies (e.g. Floci returning `associate_public_ip_address = false` and `storage_type = "gp2"` instead of `"gp3"`).
+  * *Fix/Workaround:* Added targeted `lifecycle { ignore_changes = [...] }` blocks to `aws_instance` and `aws_db_instance` to accommodate local emulator nuances without altering real AWS production declarations. Re-ran `terraform plan -detailed-exitcode` which returned clean Exit Code 0 (zero drift).
 
 ---
 

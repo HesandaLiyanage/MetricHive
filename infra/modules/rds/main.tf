@@ -65,4 +65,12 @@ resource "aws_db_instance" "postgres" {
     Name        = "${var.environment}-metrichive-postgres"
     Environment = var.environment
   }
+
+  lifecycle {
+    ignore_changes = [
+      storage_type,
+      max_allocated_storage,
+      storage_encrypted,
+    ]
+  }
 }

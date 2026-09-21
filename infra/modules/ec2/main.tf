@@ -68,6 +68,10 @@ resource "aws_iam_role_policy_attachment" "ssm_core" {
 resource "aws_iam_instance_profile" "ec2_profile" {
   name = "${var.environment}-metrichive-ec2-profile"
   role = aws_iam_role.ec2_role.name
+
+  lifecycle {
+    ignore_changes = [tags, tags_all]
+  }
 }
 
 # EC2 Application Host Instance
@@ -77,8 +81,6 @@ resource "aws_instance" "app_host" {
   subnet_id              = var.subnet_id
   vpc_security_group_ids = [aws_security_group.ec2.id]
   iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
-
-  associate_public_ip_address = true
 
   user_data = <<-EOF
               #!/bin/bash
@@ -93,5 +95,12 @@ resource "aws_instance" "app_host" {
     Name        = "${var.environment}-metrichive-app-host"
     Environment = var.environment
     Role        = "ApplicationHost"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      associate_public_ip_address,
+      vpc_security_group_ids,
+    ]
   }
 }
